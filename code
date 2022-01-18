@@ -1,0 +1,20 @@
+import matplotlib.pyplot as plt
+from cinrad.io import StandardData
+from cinrad.visualize import PPI
+import glob
+
+if __name__ == '__main__':
+    files = glob.glob('*.bin')
+    for file in files:
+        f = StandardData(file)  # 读取新标准格式雷达基数据，老标准格式数据用f = CinradReader() 
+        data_ref = f.get_data(4, 150, 'REF')  # 4为仰角所在层，此处4为2.4度仰角;150为显示半径150km;REF代表反射率\VEL代表速度
+        print(data_ref)
+        fig_ref = PPI(data_ref, style='white')  # Plot PPI
+        plt.scatter(114.914, 27.043, marker='^', c='k', s=100)  # add markers
+        # fig_ref(file + 'REF.png')
+        fig_ref(file + 'REF.eps')  # Pass the path to save the fig
+        data_vel = f.get_data(4, 150, 'VEL')  # 4为仰角所在层，此处4为2.4度仰角;150为显示半径150km;REF代表反射率\VEL代表速度
+        fig_vel = PPI(data_vel, style='white')  # Plot PPI
+        plt.scatter(114.914, 27.043, marker='^', c='k', s=100)
+        # fig_vel(file + 'VEL.png')
+        fig_vel(file + 'VEL.eps')  # Pass the path to save the fig
